@@ -4,11 +4,7 @@ const NoResultsCard = () => {
   return (
     <div className={styles.rootNoResults}>
       <div className={styles.card}>
-        <img
-          src="https://http2.mlstatic.com/frontend-assets/search-nordic/not-found.svg"
-          alt="No results found"
-          className={styles.image}
-        />
+        <img src="/not-found.svg" alt="No results found"/>
         <div className={styles.text}>
           <h2>No hay publicaciones que coincidan con tu búsqueda.</h2>
           <ul className={styles.suggestions}>

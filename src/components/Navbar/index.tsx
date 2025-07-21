@@ -20,11 +20,7 @@ const Navbar = ({ onSearch }: NavbarProps) => {
     <header className="root-navbar">
       <div className="root-navbar__container">
         <a href="/" className="root-navbar__logo">
-          <img
-            src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.139/mercadolibre/logo_large_plus@2x.webp"
-            alt="Logo"
-            className="root-navbar__logo-image"
-          />
+         <img src="/logo.png" alt="Logo"  className="root-navbar__logo-image" />
         </a>
         <div className="root-navbar__form-wrapper">
           <form className="root-navbar__form" onSubmit={(e) => e.preventDefault()}>
