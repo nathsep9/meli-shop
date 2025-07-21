@@ -1,0 +1,72 @@
+.rootProductCard {
+  padding: 1px 100px;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.separator {
+  border: none;
+  border-bottom: 1px solid #ededed;
+  margin: 0;
+}
+
+.card {
+  display: flex;
+  background-color: #fff;
+  transition: box-shadow 0.2s ease;
+  gap: 45px;
+  padding: 22px 50px;
+
+  .image {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+  }
+
+  .price {
+    font-size: 1.5rem;
+    color: #000000;
+    margin-bottom: 4px;
+  }
+
+  .installments {
+    font-size: 12px;
+    color: #00a650;
+    margin-bottom: 12px;
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  .shipping {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #00a650;
+    margin-bottom: 16px;
+  }
+
+  .link {
+    display: none;
+  }
+}
