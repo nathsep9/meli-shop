@@ -1,10 +1,8 @@
-import { Product } from '@/types/product';
 import NoResultsCard from '../NoResultsCard';
 import ProductCard from '../ProductCard';
+import { ProductListProps } from './types';
 
-interface ProductListProps {
-  products: Product[];
-}
+
 
 const ProductList= ({ products }: ProductListProps) => (
   <section className="product-list">

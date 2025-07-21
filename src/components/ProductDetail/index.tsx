@@ -1,22 +1,28 @@
-import { Product } from '@/types/product';
-import React from 'react';
 
 import ProductGallery from '../ProductGallery';
 
 import './ProductDetail.scss';
+import { ProductDetailProps } from './types';
 
-interface ProductDetailProps {
-  product: Product;
-}
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
+
+const ProductDetail = ({ product }: ProductDetailProps) => {
   const images = product.image ? [product.image] : [];
 
   return (
     <div className="product-detail">
-      <a href="/" className="product-detail__back">
-        ← Volver a productos
-      </a>
+      <div className={"product-detail__breadcrumb"}>
+     
+        <span
+          className={"product-detail__back"}
+          onClick={() => window.history.back()}
+          style={{ cursor: 'pointer', color: '#0070f3' }    }
+        >
+          Volver al listado
+        </span>
+        <span className={"product-detail__separator"}>|</span>
+        <span className={"product-detail__path"}>{product.title}</span>
+      </div>
 
       <div className="product-detail__card">
         <div className="product-detail__main">
@@ -38,7 +44,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
         </div>
 
         <div className="product-detail__description">
-          <h2>Descripción</h2>
+          <span>Descripción</span>
           <p>{product.description}</p>
         </div>
       </div>

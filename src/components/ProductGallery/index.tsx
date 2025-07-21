@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import './ProductGallery.scss';
+import { ProductGalleryProps } from './types';
 
-interface ProductGalleryProps {
-  image: string[];
-  altText?: string;
-}
-
-const ProductGallery: React.FC<ProductGalleryProps> = ({ image, altText = 'Producto' }) => {
+const ProductGallery = ({ image, altText = 'Producto' }: ProductGalleryProps) => {
   const [mainImage, setMainImage] = useState(image[0]);
 
   return (

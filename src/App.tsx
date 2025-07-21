@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Product } from '@/types/product';
+import { MainContainer } from './components/MainContainer';
+import Navbar from './components/Navbar';
+import { PAGE_SIZE } from './constants';
+
+import './styles/global.scss';
+
+interface AppProps {
+  products?: Product[];
+  productDetail?: Product;
+  currentRoute: 'list' | 'detail';
 }
 
-export default App;
+export const App: React.FC<AppProps> = ({ products = [], productDetail, currentRoute }) => {
+  const [search, setSearch] = useState('');
+  const [filtered, setFiltered] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    if (value.trim() === '') {
+      setFiltered([]);
+    } else {
+      setFiltered(products.filter((p) => p.title.toLowerCase().includes(value.toLowerCase())));
+    }
+  };
+  
+  const paginatedProducts = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  return (
+    <div className="app">
+      <header>
+        <Navbar onSearch={handleSearch} />
+      </header>
+
+      <MainContainer
+        currentRoute={currentRoute}
+        search={search}
+        paginatedProducts={paginatedProducts}
+        totalPages={totalPages}
+        productDetail={productDetail}
+      />
+    </div>
+  );
+};
