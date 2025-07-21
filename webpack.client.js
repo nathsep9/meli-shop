@@ -56,18 +56,14 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',
-        generator: {
-          filename: 'assets/[hash][ext][query]',
-        },
       },
-      // webpack.server.js
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/client/index.html',
       filename: 'index.html',
-      inject: false, // We'll manually inject scripts and styles
+      inject: false,
     }),
     new MiniCssExtractPlugin({
       filename: 'styles.[contenthash].css',
