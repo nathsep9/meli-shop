@@ -1,0 +1,49 @@
+.rootNoResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  width: 100%;
+  gap: 2rem;
+}
+
+.image {
+  width: 72px;
+  height: 72px;
+}
+
+.text {
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #111;
+  }
+}
+
+.suggestions {
+  list-style: disc;
+  padding-left: 1rem;
+  color: #333;
+
+  li {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+}
+
+.link {
+  color: #3483fa;
+
+}
