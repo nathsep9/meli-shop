@@ -1,0 +1,38 @@
+.gallery {
+  display: flex;
+  gap: 16px;
+
+  &__thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .gallery__thumb {
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+
+      img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        border-radius: 4px;
+      }
+
+      &.active {
+        border-color: #3483fa;
+      }
+    }
+  }
+
+  &__main {
+    img {
+      width: 350px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
