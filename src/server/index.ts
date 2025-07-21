@@ -1,10 +1,13 @@
 import { Product } from '@/types/product';
+import dotenv from 'dotenv';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { App } from '../App';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,21 +21,21 @@ function getAssetFilenames() {
   try {
     const publicDir = path.join(__dirname, 'public');
     const files = fs.readdirSync(publicDir);
-    const cssFile = files.find(file => file.startsWith('styles.') && file.endsWith('.css'));
-    const jsFile = files.find(file => file.startsWith('bundle.') && file.endsWith('.js'));
+    const cssFile = files.find((file) => file.startsWith('styles.') && file.endsWith('.css'));
+    const jsFile = files.find((file) => file.startsWith('bundle.') && file.endsWith('.js'));
     return {
       css: cssFile ? `/static/${cssFile}` : '/static/styles.css',
-      js: jsFile ? `/static/${jsFile}` : '/static/bundle.js'
+      js: jsFile ? `/static/${jsFile}` : '/static/bundle.js',
     };
   } catch (error) {
     return {
       css: '/static/styles.css',
-      js: '/static/bundle.js'
+      js: '/static/bundle.js',
     };
   }
 }
 
-function getHtmlTemplate(content: string, title: string = 'Productos SSR', preloadedData?: any): string {
+function getHtmlTemplate(content: string, title: string = 'Products', preloadedData?: any): string {
   const assets = getAssetFilenames();
   return `
     <!DOCTYPE html>
@@ -42,10 +45,15 @@ function getHtmlTemplate(content: string, title: string = 'Productos SSR', prelo
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>${title}</title>
       <link rel="stylesheet" href="${assets.css}">
+     <link rel="icon" type="image/x-icon" href="/favicon.svg">
     </head>
     <body>
       <div id="root">${content}</div>
-      ${preloadedData ? `<script>window.__PRELOADED_DATA__ = ${JSON.stringify(preloadedData)};</script>` : ''}
+      ${
+        preloadedData
+          ? `<script>window.__PRELOADED_DATA__ = ${JSON.stringify(preloadedData)};</script>`
+          : ''
+      }
       <script src="${assets.js}"></script>
     </body>
     </html>
@@ -55,9 +63,9 @@ function getHtmlTemplate(content: string, title: string = 'Productos SSR', prelo
 async function loadProductData(): Promise<Product[]> {
   if (productListCache) return productListCache;
   try {
-    const response = await fetch('https://fakestoreapi.com/products');
+    const response = await fetch(process.env.FAKESTORE_API as string);
     const products: Product[] = await response.json();
-    products.forEach(product => productCache.set(product.id.toString(), product));
+    products.forEach((product) => productCache.set(product.id.toString(), product));
     productListCache = products;
     return products;
   } catch (error) {
@@ -71,7 +79,7 @@ app.get('/', async (req, res) => {
     const products = await loadProductData();
     const appProps = { products, currentRoute: 'list' as const, pageType: 'list' as const };
     const reactContent = renderToString(React.createElement(App, appProps));
-    const html = getHtmlTemplate(reactContent, 'Productos SSR', appProps);
+    const html = getHtmlTemplate(reactContent, 'Meli Shop', appProps);
     res.send(html);
   } catch (error) {
     res.status(500).send('Internal Server Error');
@@ -83,16 +91,20 @@ app.get('/product/:id', async (req, res) => {
     const { id } = req.params;
     let product = productCache.get(id);
     if (!product) {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await fetch(`${process.env.FAKESTORE_API}/${id}`);
       product = await response.json();
       if (product && product.id) {
         productCache.set(id, product);
       }
     }
     if (!product || !product.id) return res.status(404).send('Producto no encontrado');
-    const appProps = { productDetail: product, currentRoute: 'detail' as const, pageType: 'detail' as const };
+    const appProps = {
+      productDetail: product,
+      currentRoute: 'detail' as const,
+      pageType: 'detail' as const,
+    };
     const reactContent = renderToString(React.createElement(App, appProps));
-    const html = getHtmlTemplate(reactContent, `${product.title} - Productos SSR`, appProps);
+    const html = getHtmlTemplate(reactContent, `${product.title} - Productos SSR2`, appProps);
     res.send(html);
   } catch (error) {
     res.status(500).send('Internal Server Error');
@@ -114,7 +126,7 @@ app.get('/api/products/:id', async (req, res) => {
     let product = productCache.get(id);
 
     if (!product) {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await fetch(`${process.env.FAKESTORE_API}/${id}`);
       product = await response.json();
       if (product && product.id) {
         productCache.set(id, product);
@@ -133,7 +145,11 @@ app.get('*', (req, res) => {
   const notFoundContent = renderToString(
     React.createElement('div', { style: { padding: '40px', textAlign: 'center' } }, [
       React.createElement('h1', { key: 'title' }, '404 - Página no encontrada'),
-      React.createElement('a', { key: 'home', href: '/', style: { color: '#1976d2', textDecoration: 'none' } }, '← Volver al inicio'),
+      React.createElement(
+        'a',
+        { key: 'home', href: '/', style: { color: '#1976d2', textDecoration: 'none' } },
+        '← Volver al inicio'
+      ),
     ])
   );
   const html = getHtmlTemplate(notFoundContent, '404 - Productos SSR');
@@ -141,9 +157,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, async () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
   await loadProductData();
-  console.log('✅ Product data preloaded successfully!');
 });
 
 export default app;
