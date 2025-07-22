@@ -13,6 +13,8 @@
     "start": "node dist/server.js",
     "generate:static": "ts-node scripts/generateStaticPages.ts",
     "generate:sitemap": "node update-sitemap.js",
+    "build:vercel": "npm run build && node build-vercel.js",
+    "vercel-build": "npm run build && node build-vercel.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx"
   },

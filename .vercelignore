@@ -1,0 +1,14 @@
+node_modules
+.env
+.cache
+*.log
+.git
+.gitignore
+README.md
+SITEMAP_README.md
+COMO_EJECUTAR_SCRIPTS.md
+scripts/
+run-sitemap.*
+quick-sitemap.js
+generate-sitemap.js
+update-sitemap.js
