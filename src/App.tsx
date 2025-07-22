@@ -37,13 +37,27 @@ export const App: React.FC<AppProps> = ({ products = [], productDetail, currentR
   }, []);
 
   const handleSearch = (value: string) => {
-    setSearch(value);
-    if (value.trim() === '') {
-      setFiltered([]);
-    } else {
-      setFiltered(products.filter((p) => p.title.toLowerCase().includes(value.toLowerCase())));
-    }
-  };
+  setSearch(value);
+  const params = new URLSearchParams(window.location.search);
+
+  if (value.trim() === '') {
+    params.delete('search');
+    params.delete('page');
+    const newParams = params.toString();
+    const newUrl = newParams
+      ? `${window.location.pathname}?${newParams}`
+      : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+    document.title = 'Meli Shop'; 
+    setFiltered([]);
+  } else {
+    params.set('search', value);
+    params.delete('page');
+    window.history.replaceState({}, '', `?${params.toString()}`);
+    document.title = `${value} - Meli Shop`;
+    setFiltered(products.filter((p) => p.title.toLowerCase().includes(value.toLowerCase())));
+  }
+};
   return (
     <div className="app">
       <header>
