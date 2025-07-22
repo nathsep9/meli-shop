@@ -12,6 +12,7 @@
     "server:dev": "nodemon dist/server.js",
     "start": "node dist/server.js",
     "generate:static": "ts-node scripts/generateStaticPages.ts",
+    "generate:sitemap": "node update-sitemap.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx"
   },
