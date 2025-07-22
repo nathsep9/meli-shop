@@ -43,9 +43,33 @@ function getHtmlTemplate(content: string, title: string = 'Products', preloadedD
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>${title}</title>
       <link rel="stylesheet" href="${assets.css}">
      <link rel="icon" type="image/x-icon" href="/favicon.svg">
+
+      <title>Meli Shop - Tu tienda de productos online</title>
+    <meta
+      name="description"
+      content="Meli Shop: Búsqueda, detalle y compra de productos con React, TypeScript y SSR. Moderno, rápido y responsivo."
+    />
+    <meta property="og:title" content="Meli Shop - Tu tienda de productos online" />
+    <meta
+      property="og:description"
+      content="Explora y busca productos, consulta detalles y disfruta de una experiencia moderna y rápida en Meli Shop."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://localhost:3000/" />
+    <meta property="og:image" content="http://localhost:3000/logo.png" />
+    <meta property="og:locale" content="es_CO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Meli Shop - Tu tienda de productos online" />
+    <meta
+      name="twitter:description"
+      content="Explora y busca productos, consulta detalles y disfruta de una experiencia moderna y rápida en Meli Shop."
+    />
+    <meta name="twitter:image" content="http://localhost:3000/logo.png" />
+    <meta name="author" content="Angie Natalia Antonio" />
+    <meta name="copyright" content="Angie Natalia Antonio" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     </head>
     <body>
       <div id="root">${content}</div>
@@ -76,10 +100,21 @@ async function loadProductData(): Promise<Product[]> {
 
 app.get('/', async (req, res) => {
   try {
-    const products = await loadProductData();
-    const appProps = { products, currentRoute: 'list' as const, pageType: 'list' as const };
+    const searchQuery = (req.query.search as string)?.toLowerCase() || '';
+    const allProducts = await loadProductData();
+    const filteredProducts = searchQuery
+      ? allProducts.filter((p) => p.title.toLowerCase().includes(searchQuery))
+      : allProducts;
+
+    const appProps = {
+      products: filteredProducts,
+      currentRoute: 'list' as const,
+      pageType: 'list' as const,
+    };
+
     const reactContent = renderToString(React.createElement(App, appProps));
-    const html = getHtmlTemplate(reactContent, 'Meli Shop', appProps);
+    const title = searchQuery ? `${searchQuery} - Meli Shop` : 'Meli Shop';
+    const html = getHtmlTemplate(reactContent, title, appProps);
     res.send(html);
   } catch (error) {
     res.status(500).send('Internal Server Error');
