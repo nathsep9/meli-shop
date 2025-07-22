@@ -46,6 +46,8 @@ PORT=3000
 
 FAKESTORE_API=https://fakestoreapi.com/products
 
+BASE_URL=http://localhost:3000
+
 4. Available Scripts
 
 npm run build
