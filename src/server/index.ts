@@ -37,7 +37,7 @@ function getAssetFilenames() {
 
 function getHtmlTemplate(content: string, title: string = 'Products', preloadedData?: any): string {
   const assets = getAssetFilenames();
-  const baseUrl = process.env.BASE_URL || 'https://meli-shop-flouo6y5d-naliaab1809s-projects.vercel.app';
+  const baseUrl = process.env.BASE_URL || 'https://meli-shop-production.up.railway.app';
   
   return `
     <!DOCTYPE html>
@@ -194,7 +194,7 @@ app.get('/sitemap.xml', (req, res) => {
       res.sendFile(sitemapPath);
     } else {
       // Generar sitemap dinámicamente si no existe el archivo
-      const baseUrl = process.env.BASE_URL || 'https://meli-shop-flouo6y5d-naliaab1809s-projects.vercel.app';
+      const baseUrl = process.env.BASE_URL || 'https://meli-shop-production.up.railway.app';
       const currentDate = new Date().toISOString().split('T')[0];
       
       const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -236,7 +236,7 @@ ${Array.from({ length: 20 }, (_, i) => i + 1).map(id => `  <url>
 // Servir robots.txt
 app.get('/robots.txt', (req, res) => {
   try {
-    const baseUrl = process.env.BASE_URL || 'https://meli-shop-flouo6y5d-naliaab1809s-projects.vercel.app';
+    const baseUrl = process.env.BASE_URL || 'https://meli-shop-production.up.railway.app';
     const robotsTxt = `User-agent: *
 Allow: /
 
