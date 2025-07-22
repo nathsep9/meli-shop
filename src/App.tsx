@@ -49,7 +49,6 @@ export const App: React.FC<AppProps> = ({ products = [], productDetail, currentR
       <header>
         <Navbar onSearch={handleSearch} />
       </header>
-
       <MainContainer
         currentRoute={currentRoute}
         search={search}

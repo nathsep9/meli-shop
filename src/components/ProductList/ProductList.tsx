@@ -2,8 +2,6 @@ import NoResultsCard from '../NoResultsCard';
 import ProductCard from '../ProductCard';
 import { ProductListProps } from './types';
 
-
-
 const ProductList= ({ products }: ProductListProps) => (
   <section className="product-list">
     <div className="product-list__list">
@@ -19,6 +17,5 @@ const ProductList= ({ products }: ProductListProps) => (
     </div>
   </section>
 );
-
 
 export default ProductList;

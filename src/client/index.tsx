@@ -32,12 +32,12 @@ async function fetchAndRender() {
     let data;
 
     if (path === '/') {
-      const response = await fetch(process.env.FAKESTORE_API as string);
+      const response = await fetch('https://fakestoreapi.com/products');
       const products = await response.json();
       data = { currentRoute: 'list', products } as AppProps;
     } else if (path.startsWith('/product/')) {
       const id = path.split('/product/')[1];
-      const response = await fetch(`${process.env.FAKESTORE_API as string}/${id}`);
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
       const productDetail = await response.json();
       data = { currentRoute: 'detail', productDetail } as AppProps;
     } else {

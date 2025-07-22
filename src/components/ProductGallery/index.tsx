@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import './ProductGallery.scss';
 import { ProductGalleryProps } from './types';
+
+import './ProductGallery.scss';
 
 const ProductGallery = ({ image, altText = 'Producto' }: ProductGalleryProps) => {
   const [mainImage, setMainImage] = useState(image[0]);

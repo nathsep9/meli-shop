@@ -1,10 +1,12 @@
-import { Product } from '@/types/product';
 import dotenv from 'dotenv';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+
+import { Product } from '@/types/product';
+
 import { App } from '../App';
 
 dotenv.config();
@@ -145,6 +147,7 @@ app.get('/product/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 /**
  * NOTA SOBRE LA PAGINACIÓN:
  * Actualmente, la paginación se realiza en el frontend trayendo todos los productos desde la API,
@@ -152,6 +155,7 @@ app.get('/product/:id', async (req, res) => {
  * No se implementó paginación a través de query params en el endpoint porque la API utilizada
  * no soporta parámetros de paginación ni filtrado por query.
  */
+
 app.get('/api/products', async (req, res) => {
   try {
     const products = await loadProductData();
