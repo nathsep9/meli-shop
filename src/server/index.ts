@@ -110,7 +110,13 @@ app.get('/product/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
+/**
+ * NOTA SOBRE LA PAGINACIÓN:
+ * Actualmente, la paginación se realiza en el frontend trayendo todos los productos desde la API,
+ * y luego filtrando y mostrando los resultados de 10 en 10 según la búsqueda realizada.
+ * No se implementó paginación a través de query params en el endpoint porque la API utilizada
+ * no soporta parámetros de paginación ni filtrado por query.
+ */
 app.get('/api/products', async (req, res) => {
   try {
     const products = await loadProductData();
@@ -157,6 +163,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, async () => {
+  console.log(`✅ Servidor iniciado correctamente en http://localhost:${PORT}`);
   await loadProductData();
 });
 
