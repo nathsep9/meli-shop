@@ -10,7 +10,7 @@ import { App } from '../App';
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
@@ -37,8 +37,6 @@ function getAssetFilenames() {
 
 function getHtmlTemplate(content: string, title: string = 'Products', preloadedData?: any): string {
   const assets = getAssetFilenames();
-  const baseUrl = 'https://meli-shop-production.up.railway.app';
-
   return `
     <!DOCTYPE html>
     <html lang="es">
@@ -46,33 +44,32 @@ function getHtmlTemplate(content: string, title: string = 'Products', preloadedD
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="${assets.css}">
-      <link rel="icon" type="image/x-icon" href="/favicon.svg">
+     <link rel="icon" type="image/x-icon" href="/favicon.svg">
 
-      <title>${title}</title>
-      <meta
-        name="description"
-        content="Meli Shop: Búsqueda, detalle y compra de productos con React, TypeScript y SSR. Moderno, rápido y responsivo."
-      />
-      <meta property="og:title" content="${title}" />
-      <meta
-        property="og:description"
-        content="Explora y busca productos, consulta detalles y disfruta de una experiencia moderna y rápida en Meli Shop."
-      />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="${baseUrl}/" />
-      <meta property="og:image" content="${baseUrl}/logo.png" />
-      <meta property="og:locale" content="es_CO" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="${title}" />
-      <meta
-        name="twitter:description"
-        content="Explora y busca productos, consulta detalles y disfruta de una experiencia moderna y rápida en Meli Shop."
-      />
-      <meta name="twitter:image" content="${baseUrl}/logo.png" />
-      <meta name="author" content="Angie Natalia Antonio" />
-      <meta name="copyright" content="Angie Natalia Antonio" />
-      <link rel="icon" type="image/png" href="/logo.png" />
-      <link rel="canonical" href="${baseUrl}/" />
+      <title>Meli Shop - Tu tienda de productos online</title>
+    <meta
+      name="description"
+      content="Meli Shop: Búsqueda, detalle y compra de productos con React, TypeScript y SSR. Moderno, rápido y responsivo."
+    />
+    <meta property="og:title" content="Meli Shop - Tu tienda de productos online" />
+    <meta
+      property="og:description"
+      content="Explora y busca productos, consulta detalles y disfruta de una experiencia moderna y rápida en Meli Shop."
+    />
+    <meta property="og:type" content="website" />
+   <meta property="og:url" content="https://meli-shop.vercel.app/" />
+    <meta property="og:image" content="https://meli-shop.vercel.app/logo.png" />
+    <meta property="og:locale" content="es_CO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Meli Shop - Tu tienda de productos online" />
+    <meta
+      name="twitter:description"
+      content="Explora y busca productos, consulta detalles y disfruta de una experiencia moderna y rápida en Meli Shop."
+    />
+    <meta name="twitter:image" content="http://localhost:3000/logo.png" />
+    <meta name="author" content="Angie Natalia Antonio" />
+    <meta name="copyright" content="Angie Natalia Antonio" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     </head>
     <body>
       <div id="root">${content}</div>
@@ -90,7 +87,7 @@ function getHtmlTemplate(content: string, title: string = 'Products', preloadedD
 async function loadProductData(): Promise<Product[]> {
   if (productListCache) return productListCache;
   try {
-    const response = await fetch('https://fakestoreapi.com/products');
+    const response = await fetch(process.env.FAKESTORE_API as string);
     const products: Product[] = await response.json();
     products.forEach((product) => productCache.set(product.id.toString(), product));
     productListCache = products;
@@ -129,7 +126,7 @@ app.get('/product/:id', async (req, res) => {
     const { id } = req.params;
     let product = productCache.get(id);
     if (!product) {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await fetch(`${process.env.FAKESTORE_API}/${id}`);
       product = await response.json();
       if (product && product.id) {
         productCache.set(id, product);
@@ -170,7 +167,7 @@ app.get('/api/products/:id', async (req, res) => {
     let product = productCache.get(id);
 
     if (!product) {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await fetch(`${process.env.FAKESTORE_API}/${id}`);
       product = await response.json();
       if (product && product.id) {
         productCache.set(id, product);
@@ -182,80 +179,6 @@ app.get('/api/products/:id', async (req, res) => {
     res.json({ productDetail: product, currentRoute: 'detail' });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-// Servir sitemap.xml
-app.get('/sitemap.xml', (req, res) => {
-  try {
-    const sitemapPath = path.join(__dirname, '../sitemap.xml');
-    if (fs.existsSync(sitemapPath)) {
-      res.set('Content-Type', 'application/xml');
-      res.sendFile(sitemapPath);
-    } else {
-      // Generar sitemap dinámicamente si no existe el archivo
-      const baseUrl = 'https://meli-shop-production.up.railway.app';
-      const currentDate = new Date().toISOString().split('T')[0];
-
-      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/api/products</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-${Array.from({ length: 20 }, (_, i) => i + 1)
-  .map(
-    (id) => `  <url>
-    <loc>${baseUrl}/product/${id}</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/api/products/${id}</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>`
-  )
-  .join('\n')}
-</urlset>`;
-
-      res.set('Content-Type', 'application/xml');
-      res.send(sitemap);
-    }
-  } catch (error) {
-    res.status(500).send('Error serving sitemap');
-  }
-});
-
-// Servir robots.txt
-app.get('/robots.txt', (req, res) => {
-  try {
-    const baseUrl = 'https://meli-shop-production.up.railway.app';
-    const robotsTxt = `User-agent: *
-Allow: /
-
-Sitemap: ${baseUrl}/sitemap.xml
-
-Allow: /api/products
-Allow: /api/products/*
-Allow: /product/*
-
-Crawl-delay: 1`;
-
-    res.set('Content-Type', 'text/plain');
-    res.send(robotsTxt);
-  } catch (error) {
-    res.status(500).send('Error serving robots.txt');
   }
 });
 
