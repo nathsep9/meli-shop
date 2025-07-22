@@ -10,7 +10,7 @@ import { App } from '../App';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
@@ -90,7 +90,7 @@ function getHtmlTemplate(content: string, title: string = 'Products', preloadedD
 async function loadProductData(): Promise<Product[]> {
   if (productListCache) return productListCache;
   try {
-    const response = await fetch(process.env.FAKESTORE_API as string);
+    const response = await fetch('https://fakestoreapi.com/products');
     const products: Product[] = await response.json();
     products.forEach((product) => productCache.set(product.id.toString(), product));
     productListCache = products;
@@ -129,7 +129,7 @@ app.get('/product/:id', async (req, res) => {
     const { id } = req.params;
     let product = productCache.get(id);
     if (!product) {
-      const response = await fetch(`${process.env.FAKESTORE_API}/${id}`);
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
       product = await response.json();
       if (product && product.id) {
         productCache.set(id, product);
@@ -170,7 +170,7 @@ app.get('/api/products/:id', async (req, res) => {
     let product = productCache.get(id);
 
     if (!product) {
-      const response = await fetch(`${process.env.FAKESTORE_API}/${id}`);
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
       product = await response.json();
       if (product && product.id) {
         productCache.set(id, product);

@@ -67,22 +67,31 @@ railway up
 
 ## 🔍 Variables de Entorno en Railway
 
-Configurar en Railway Dashboard o mediante CLI:
+**IMPORTANTE:** Estas variables DEBEN configurarse en Railway Dashboard antes del deploy:
 
 ```bash
-# Via CLI
-railway variables set FAKESTORE_API=https://fakestoreapi.com/products
-railway variables set BASE_URL=https://meli-shop-production.up.railway.app
-railway variables set NODE_ENV=production
-railway variables set PORT=3000
-```
-
-O en el Dashboard de Railway:
-```
+# Variables OBLIGATORIAS para Railway:
 FAKESTORE_API=https://fakestoreapi.com/products
 BASE_URL=https://meli-shop-production.up.railway.app
 NODE_ENV=production
 PORT=3000
+```
+
+### Configurar via Railway Dashboard:
+1. Ve a tu proyecto en Railway
+2. Clica en "Variables"
+3. Agrega cada variable una por una:
+   - `FAKESTORE_API` = `https://fakestoreapi.com/products`
+   - `BASE_URL` = `https://meli-shop-production.up.railway.app`
+   - `NODE_ENV` = `production`
+   - `PORT` = `3000`
+
+### Configurar via CLI:
+```bash
+railway variables set FAKESTORE_API=https://fakestoreapi.com/products
+railway variables set BASE_URL=https://meli-shop-production.up.railway.app
+railway variables set NODE_ENV=production
+railway variables set PORT=3000
 ```
 
 ## ✅ Verificar que Funciona
