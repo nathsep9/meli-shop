@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import ProductDetail from '../ProductDetail';
 import ProductList from '../ProductList/ProductList';
 import { MainContainerProps } from './types';
@@ -10,8 +8,9 @@ export const MainContainer = ({
   paginatedProducts,
   totalPages,
   productDetail,
-}: MainContainerProps) => {
-  const [page, setPage] = useState(1);
+  page,
+  setPage,
+}: MainContainerProps ) => {
   return (
     <main className="app__main">
       {currentRoute === 'list' && search.trim() !== '' && (

@@ -1,27 +1,34 @@
+import { useEffect } from 'react';
 
 import ProductGallery from '../ProductGallery';
-
-import './ProductDetail.scss';
 import { ProductDetailProps } from './types';
 
-
+import './ProductDetail.scss';
 
 const ProductDetail = ({ product }: ProductDetailProps) => {
   const images = product.image ? [product.image] : [];
 
+  useEffect(() => {
+    if (product?.title) {
+      document.title = `${product.title} - Meli Shop`;
+    }
+    return () => {
+      document.title = 'Meli Shop';
+    };
+  }, [product]);
+
   return (
     <div className="product-detail">
-      <div className={"product-detail__breadcrumb"}>
-     
+      <div className={'product-detail__breadcrumb'}>
         <span
-          className={"product-detail__back"}
+          className={'product-detail__back'}
           onClick={() => window.history.back()}
-          style={{ cursor: 'pointer', color: '#0070f3' }    }
+          style={{ cursor: 'pointer', color: '#0070f3' }}
         >
           Volver al listado
         </span>
-        <span className={"product-detail__separator"}>|</span>
-        <span className={"product-detail__path"}>{product.title}</span>
+        <span className={'product-detail__separator'}>|</span>
+        <span className={'product-detail__path'}>{product.title}</span>
       </div>
 
       <div className="product-detail__card">
