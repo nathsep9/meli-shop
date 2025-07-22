@@ -37,8 +37,8 @@ function getAssetFilenames() {
 
 function getHtmlTemplate(content: string, title: string = 'Products', preloadedData?: any): string {
   const assets = getAssetFilenames();
-  const baseUrl = process.env.BASE_URL || 'https://meli-shop-production.up.railway.app';
-  
+  const baseUrl = 'https://meli-shop-production.up.railway.app';
+
   return `
     <!DOCTYPE html>
     <html lang="es">
@@ -194,9 +194,9 @@ app.get('/sitemap.xml', (req, res) => {
       res.sendFile(sitemapPath);
     } else {
       // Generar sitemap dinámicamente si no existe el archivo
-      const baseUrl = process.env.BASE_URL || 'https://meli-shop-production.up.railway.app';
+      const baseUrl = 'https://meli-shop-production.up.railway.app';
       const currentDate = new Date().toISOString().split('T')[0];
-      
+
       const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -211,7 +211,9 @@ app.get('/sitemap.xml', (req, res) => {
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
-${Array.from({ length: 20 }, (_, i) => i + 1).map(id => `  <url>
+${Array.from({ length: 20 }, (_, i) => i + 1)
+  .map(
+    (id) => `  <url>
     <loc>${baseUrl}/product/${id}</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>weekly</changefreq>
@@ -222,7 +224,9 @@ ${Array.from({ length: 20 }, (_, i) => i + 1).map(id => `  <url>
     <lastmod>${currentDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>`).join('\n')}
+  </url>`
+  )
+  .join('\n')}
 </urlset>`;
 
       res.set('Content-Type', 'application/xml');
@@ -236,7 +240,7 @@ ${Array.from({ length: 20 }, (_, i) => i + 1).map(id => `  <url>
 // Servir robots.txt
 app.get('/robots.txt', (req, res) => {
   try {
-    const baseUrl = process.env.BASE_URL || 'https://meli-shop-production.up.railway.app';
+    const baseUrl = 'https://meli-shop-production.up.railway.app';
     const robotsTxt = `User-agent: *
 Allow: /
 
