@@ -50,6 +50,6 @@
   ],
   "env": {
     "FAKESTORE_API": "https://fakestoreapi.com/products",
-    "BASE_URL": "https://meli-shop-flouo6y5d-naliaab1809s-projects.vercel.app"
+    "BASE_URL": "https://meli-shop-production.up.railway.app"
   }
 }
