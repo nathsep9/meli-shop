@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Product } from '@/types/product';
+import { Product } from './types/product';
 import { MainContainer } from './components/MainContainer';
 import Navbar from './components/Navbar';
 import { PAGE_SIZE } from './constants';
@@ -19,6 +19,16 @@ export const App: React.FC<AppProps> = ({ products = [], productDetail, currentR
   const [page, setPage] = useState(1);
   const paginatedProducts = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const [allProducts, setAllProducts] = useState<Product[]>(products);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const preloadedData = (window as any).__PRELOADED_DATA__;
+      if (preloadedData?.products) {
+        setAllProducts(preloadedData.products);
+      }
+    }
+  }, []);
   useEffect(() => {
     const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
     if (navEntry?.type === 'reload') {
@@ -55,7 +65,7 @@ export const App: React.FC<AppProps> = ({ products = [], productDetail, currentR
     params.delete('page');
     window.history.replaceState({}, '', `?${params.toString()}`);
     document.title = `${value} - Meli Shop`;
-    setFiltered(products.filter((p) => p.title.toLowerCase().includes(value.toLowerCase())));
+    setFiltered(allProducts.filter((p) => p.title.toLowerCase().includes(value.toLowerCase())));
   }
 };
   return (

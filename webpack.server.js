@@ -2,12 +2,21 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-  entry: './src/server/index.ts',
+  entry: {
+    server: './src/server/index.ts',
+    app: './src/server/app-export.ts',  
+  },
   target: 'node',
-  externals: [nodeExternals()],
+  externals: [
+    nodeExternals({ allowlist: [
+        /^(?!express$|^fs$|^path$|^dotenv$)/ 
+      ]
+    })
+  ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'server.js',
+    filename: '[name].js',
+    libraryTarget: 'commonjs2',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],

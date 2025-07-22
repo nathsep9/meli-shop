@@ -1,0 +1,14 @@
+node_modules
+.git
+env
+_.log
+README.md
+VERCEL_DEPLOY.md
+RAILWAY_DEPLOY.md
+.eslintrc_
+.gitignore
+.prettierrc
+.dockerignore
+.railwayignore
+Dockerfile
+railway.json

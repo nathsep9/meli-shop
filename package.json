@@ -6,15 +6,12 @@
   "scripts": {
     "dev": "concurrently \"npm run build:watch\" \"npm run server:dev\"",
     "build": "npm run build:client && npm run build:server",
+    "vercel-build": "webpack --config webpack.client.js --mode production && webpack --config webpack.server.js --mode production",
     "build:client": "webpack --config webpack.client.js --mode production",
     "build:server": "webpack --config webpack.server.js --mode production",
     "build:watch": "concurrently \"webpack --config webpack.client.js --mode development --watch\" \"webpack --config webpack.server.js --mode development --watch\"",
     "server:dev": "nodemon dist/server.js",
     "start": "node dist/server.js",
-    "generate:static": "ts-node scripts/generateStaticPages.ts",
-    "generate:sitemap": "node update-sitemap.js",
-    "build:vercel": "npm run build && node build-vercel.js",
-    "vercel-build": "npm run build && node build-vercel.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx"
   },
@@ -28,6 +25,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@vercel/node": "^3.0.0",
     "axios": "^1.10.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",

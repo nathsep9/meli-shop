@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Product } from '@/types/product';
 import { hydrateRoot } from 'react-dom/client';
 import { App } from '../App';
+import { Product } from '../types/product';
 
 import '../styles/global.scss';
 

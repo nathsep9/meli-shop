@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.js"
+    }
+  ],
+  "env": {
+    "FAKESTORE_API": "https://fakestoreapi.com/products",
+    "NODE_ENV": "production"
+  }
+}
